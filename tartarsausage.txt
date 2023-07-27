@@ -1,0 +1,9 @@
+Accessing the URL provided on the platform returned a rather basic webpage
+
+You might think that solving this challenge involves playing around with the upload functionality, but it doesn’t. The source code of the index page revealed a ‘secret’ page:
+
+The challenge mentioned tar multiple times and the new page mentioned something about shell commands “that won’t succeed”, so (after multiple attempts) I guessed that the PHP script that processes the data gives the inputed string as an argument to tar by using PHP’s escapeshellcmd function. escapeshellcmd is known to be (kind of) vulnerable - it makes sure no other commands get executed, but it allows the input to consist of multiple switches. Also, tar’s GTFOBins page suggests the program has some switches that would allow an attacker to execute arbitrary commands:
+
+tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
+tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec="ls -lah"
+tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec="cat <path>/flag"
